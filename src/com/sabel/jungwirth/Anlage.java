@@ -131,4 +131,28 @@ public class Anlage extends JFrame {
         return scheibeMannLiegend.anzahlDerFehler() + scheibeMannStehend.anzahlDerFehler() + scheibeFrauLiegend.anzahlDerFehler() + scheibeFrauStehend.anzahlDerFehler();
     } // END int anzahlGesamt()
 
+
+    private void speichern() {
+
+        if (true) {
+
+            int j = JOptionPane.showConfirmDialog(this, "Anzahl dert Fehler ertfolgreich gespeichert!", "Programm wird beendet", JOptionPane.DEFAULT_OPTION);
+        } else {
+            JOptionPane.showMessageDialog(this, "Fehler beim Speichern", "Programm wird beendet", JOptionPane.OK_OPTION);
+        }
+
+    }
+
+    private void initEvents2() {
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                speichern();
+                System.exit(NORMAL);
+            }
+        });
+    }
+
+
+
 } // END CLASS ANLAGE
