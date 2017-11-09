@@ -10,6 +10,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.WindowAdapter;
 import java.awt.event.WindowEvent;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 
 public class Anlage extends JFrame {
 
@@ -21,7 +24,7 @@ public class Anlage extends JFrame {
 
     // CONSTRUCTOR
     public Anlage() {
-        super("Simple-Mixed-Relay");
+        super("Single-Mixed-Relay Simulation");
         this.setSize(550, 200);
         this.setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
         this.setLocationRelativeTo(null);
@@ -83,8 +86,24 @@ public class Anlage extends JFrame {
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
-                exit();
-            }
+                BufferedWriter bw = null;
+                try {
+                    bw = new BufferedWriter(new FileWriter("Fehler.txt"));
+                    bw.write(String.valueOf(anzahlGesamt()));
+                    savePoints();
+                } catch (IOException e1) {
+                    JOptionPane.showMessageDialog(null, "Fehler beim Speichern", "Programm wird beendet", JOptionPane.WARNING_MESSAGE);
+                } finally {
+                    if (bw != null) {
+                        try {
+                            bw.close();
+                        } catch (IOException e1) {
+                            e1.printStackTrace();
+                        }
+                    } // END FINALLY IF
+                } // END FINALLY
+                System.exit(NORMAL);
+            } // END WINDOWCLOSING
         });
 
         // JBUTTON FEHLER GESAMT
@@ -95,24 +114,26 @@ public class Anlage extends JFrame {
             }
         });
 
-        // JBUTTON FAILURE ATHLETH 1
+        // JBUTTON FAILURE ATHLET 1
         this.jButtonFehlerMann.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jLabelFehlerMann.setText(anzahlAthlet1() + " Fehler");
+                jButtonFehlerMann.setEnabled(false);
             }
         });
-        // JBUTTON FAILURE ATHLETH 2
+        // JBUTTON FAILURE ATHLET 2
         this.jButtonFehlerFrau.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 jLabelFehlerFrau.setText(anzahlAthlet2() + " Fehler");
+                jButtonFehlerFrau.setEnabled(false);
             }
         });
     } // END void initEvents()
 
     // METHOD ON CLOSING WINDOW
-    private void exit() {
+    private void savePoints() {
         JOptionPane.showMessageDialog(Anlage.this, "Das Programm wird beendet und die Strafpunkte werden gespeichert", "Programmende ", JOptionPane.INFORMATION_MESSAGE);
     } // END void exit()
 
@@ -130,29 +151,5 @@ public class Anlage extends JFrame {
     public int anzahlGesamt() {
         return scheibeMannLiegend.anzahlDerFehler() + scheibeMannStehend.anzahlDerFehler() + scheibeFrauLiegend.anzahlDerFehler() + scheibeFrauStehend.anzahlDerFehler();
     } // END int anzahlGesamt()
-
-
-    private void speichern() {
-
-        if (true) {
-
-            int j = JOptionPane.showConfirmDialog(this, "Anzahl dert Fehler ertfolgreich gespeichert!", "Programm wird beendet", JOptionPane.DEFAULT_OPTION);
-        } else {
-            JOptionPane.showMessageDialog(this, "Fehler beim Speichern", "Programm wird beendet", JOptionPane.OK_OPTION);
-        }
-
-    }
-
-    private void initEvents2() {
-        this.addWindowListener(new WindowAdapter() {
-            @Override
-            public void windowClosing(WindowEvent e) {
-                speichern();
-                System.exit(NORMAL);
-            }
-        });
-    }
-
-
 
 } // END CLASS ANLAGE
